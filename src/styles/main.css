@@ -1,0 +1,53 @@
+#dots-container {
+    cursor: pointer;
+    margin: 0 auto;
+    width: 90%;
+    height: 600px;
+    background-color: rgb(251, 243, 232);
+    border: 3px solid rgb(204, 176, 54);
+}
+
+#buttons-container {
+    margin: 0 auto;
+    width: 700px;
+    height: 75px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#undo, #redo, #play-history {
+    font-size: 22px;
+    padding: 20px 60px;
+    color: white;
+    background-color: rgb(206, 193, 24);
+    margin: 20px 10px 10px;
+    border-radius: 6px;
+    text-align: center;
+    transition: top .01s linear;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: 0.2s all ease-in;
+
+    outline: none;
+}
+
+#undo:hover, #redo:hover, #play-history:hover {
+    background-color: rgb(233, 219, 24);
+}
+
+:disabled {
+    background-color: rgb(128, 127, 126) !important;
+    cursor: initial !important;
+}
+
+.dot {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    background-color: blue;
+}
