@@ -31,18 +31,9 @@ const addDot = (x, y) => {
         return state.push(Immutable.Map({
             x: x,
             y: y,
-            id: +new Date()
         }));
     });
 };
-
-const removeDot = (id) => {
-    operation((state) => {
-        return state.filter((dot) => {
-            return dot.get('id') !== id;
-        });
-    });
-}
 
 const draw = () => {
     dotsContainer.innerHTML = '';
@@ -52,10 +43,13 @@ const draw = () => {
         newDot.style.left = dot.get('x') + 'px';
         newDot.style.top = dot.get('y') + 'px';
     });
+    manageButtonsDisableAttribute();
 
-    undoButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
-    redoButton.disabled = (historyIndex !== history.length - 1) ? '' : 'disabled';
-    playHistoryButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
+    function manageButtonsDisableAttribute() {
+        undoButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
+        redoButton.disabled = (historyIndex !== history.length - 1) ? '' : 'disabled';
+        playHistoryButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
+    }
 };
 
 dotsContainer.addEventListener('click', (e) => {
