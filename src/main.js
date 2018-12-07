@@ -1,5 +1,5 @@
 import './styles/main.css';
-import Immutable from 'immutable';
+import { Map, List } from 'immutable';
 
 
 const dotsContainer = document.getElementById('dots-container');
@@ -8,19 +8,20 @@ const redoButton = document.getElementById('redo');
 const playHistoryButton = document.getElementById('play-history');
 
 
-let history = [Immutable.List([])];
+let history = List([List([])]);
 let historyIndex = 0;
 let areEventsBlocked = false;
 
 
 const operation = (fn) => {
-    history = history.slice(0, historyIndex + 1);
+    // if we have history after index => delete it
+    history = history.setSize(historyIndex + 1);
 
-    // any fn in our code returns new state
-    const newState = fn(history[historyIndex]);
+    // any fn must return new state
+    const newState = fn(history.get(historyIndex));
 
     // add new state to the history list
-    history.push(newState);
+    history = history.push(newState);
     historyIndex++;
 
     draw();
@@ -28,7 +29,7 @@ const operation = (fn) => {
 
 const addDot = (x, y) => {
     operation((state) => {
-        return state.push(Immutable.Map({
+        return state.push(Map({
             x: x,
             y: y,
         }));
@@ -37,7 +38,9 @@ const addDot = (x, y) => {
 
 const draw = () => {
     dotsContainer.innerHTML = '';
-    history[historyIndex].forEach((dot) => {
+    // const currentState = history.toJS()[historyIndex];
+    // if (currentState === undefined) return;
+    history.get(historyIndex).forEach((dot) => {
         const newDot = dotsContainer.appendChild(document.createElement('div'));
         newDot.className = 'dot';
         newDot.style.left = dot.get('x') + 'px';
@@ -47,7 +50,7 @@ const draw = () => {
 
     function manageButtonsDisableAttribute() {
         undoButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
-        redoButton.disabled = (historyIndex !== history.length - 1) ? '' : 'disabled';
+        redoButton.disabled = (historyIndex !== history.size - 1) ? '' : 'disabled';
         playHistoryButton.disabled = (historyIndex !== 0) ? '' : 'disabled';
     }
 };
@@ -68,7 +71,7 @@ undoButton.addEventListener('click', () => {
 redoButton.addEventListener('click', () => {
     if (areEventsBlocked) return;
 
-    if (historyIndex < history.length) historyIndex++;
+    if (historyIndex < history.size) historyIndex++;
     draw();
 });
 
